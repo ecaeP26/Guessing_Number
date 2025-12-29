@@ -92,7 +92,8 @@ def main():
         try_again = restart()
     print("Nice game! Thanks for playing.")
 
-main()
+if __name__ == "__main__":
+    main()
 
         
 
