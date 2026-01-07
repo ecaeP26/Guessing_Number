@@ -1,105 +1,83 @@
-import random
 
-print()
-print("-----------------------------------")
-print("WElCOME TO THE NUMBER GUESSING GAME")
-print("-----------------------------------")
-print()
-print("I'm thinking of a number between 1 and 100. \n"
-      "You have 5 chances to guess the correct number.\n")
-
-
-# DIFFICULTY MODE
+# DIFFICULTY MODE OPTIONS
 def set_difficulty():
+
     while True:
-        level = input("Set a difficulty: \n"
-        "[1] EASY 10 chances \n"
-        "[2] MEDIUM 5 chances \n"
-        "[3] HARD 3 chances \n"
-        "Enter the number: ")
+        try:
+            difficulty = int(input("Choose difficulty: [1] Easy [2] Medium [3] Hard: "))    
 
-        if level in ["1", "2", "3"]:
-            level= int(level)
-            break
-        else:
-            print("Invalid Input")    
-
-    if level == 1:
-        print("You have selected the EASY level")
+            if difficulty in (1, 2 ,3):
+                break
+            else:
+                print("Choose the numbers only from 1-3.")
+        except ValueError:
+            print("Input Invalid. Type a number.")
+    
+    if difficulty == 1:
+        print("You selected the Easy Mode. You have 10 attempts to guess the number from 1-100")
         return 10
-    elif level == 2:
-        print("You have selected the MEDIUM level")
+    if difficulty == 2:
+        print("You selected the Medium Mode. You have 7 attempts to guess the number from 1-100")
+        return 7
+    else:
+        print("You selected the Hard Mode. You have 5 attempts to guess the number from 1-100")
         return 5
-    elif level == 3:
-        print("You have selected the HARD Level")
-        return 3
-
-
-# GAME STARTING POINT
+# GAME START
 def game_start(chances):
+    
+    attempts = 0
+    num_guess = random.randint(1, 100)
 
-    num_to_guess = random.randint(1, 100)
-    chances_used = 0
+    while attempts < chances:
 
-    while chances_used < chances:
+        remaining = chances - attempts
 
-        remaining = chances - chances_used
+        try:
+            print(f"{remaining} chances remaining.")
+            player = int(input("Enter your guess number: "))
 
-        print(f"You have {remaining} chances left.")
+            if not (1 <= player <= 100):
+                print("Enter a number from 1-100 only.")
+                continue
 
-        player = input("Enter your guess: ")
-        
-        if not player.isdigit():
-            print("Invalid Input: Input must be numbers only.")
+        except ValueError:
+            print("Input Invalid. Alphabetical and sysmbols are not allowed.")
             continue
-        
-        player = int(player)
-        chances_used += 1
 
-        if player == num_to_guess:
-            print(f"Congratulations!! You guessed the correct number in {chances_used} attempts! ")
+        attempts += 1
+
+        if player == num_guess:
+            print(f"Congratulations!! You've guessed the correct number in {attempts} attempts!!")
             return True
-        elif player > num_to_guess:
-            print("Your number guess is too high.")
+        elif player < num_guess:
+            print("Too low")
         else:
-            print("Your number guess is too low.")
+            print("Too high")
 
-    print(f"You ran out of chances! The correct number is {num_to_guess}")
+    print(f"You've run out of chances! Better Luck next time :(")
     return False
-
-
-# RESTARTING GAME
-def restart():
+# GAME RESTART
+def game_reset():
     
     while True:
-        play_again = input("Play again: Y/N: ").lower().lstrip()
+        try_again = input("Would you like to play again? [Y/N]: ").lower()
 
-        if play_again == "y":
+        if try_again not in ("y", "n"):
+            print("Enter [Y] Yes or [N] No only.")
+        elif try_again == "y":
             return True
-        elif play_again == "n":
-            return False
         else:
-            print("Invalid Input: input must be y/n only.")
+            return False 
 
 def main():
 
-    try_again = True
+    game_restart = True
 
-    while try_again:
-        
+    while game_restart:
         chances = set_difficulty()
         game_start(chances)
-        try_again = restart()
-    print("Nice game! Thanks for playing.")
+        game_restart = game_reset()
+    print("Thanks for playing!!")
 
 if __name__ == "__main__":
     main()
-
-        
-
-
-
-
-
-
-
